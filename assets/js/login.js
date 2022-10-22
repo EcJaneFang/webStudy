@@ -61,11 +61,12 @@ window.onload = function () {
                 password
             }
         }).then(res => {
-            // console.log(res);
+            console.log(res);
             if (res.status === 200) {
                 toastr.success('res.data.message');
                 if (res.data.code === 0) {
                     setTimeout(() => {
+                        localStorage.setItem('token', res.data.token)
                         location.href = './index.html'
                     }, 1000);
 
