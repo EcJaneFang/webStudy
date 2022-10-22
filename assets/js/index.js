@@ -11,15 +11,16 @@ window.onload = function () {
         })
     })
 
-    let init = document.querySelector('.init').onclick = function () {
+    document.querySelector('.init').onclick = function () {
         axios({
             method: 'get',
-            url: "http://www.itcbc.com:8000/init/data",
-            headers: {
-                "Authorization": localStorage.getItem('token')
-            }
+            url: "/init/data",
+            // headers: {
+            //     "Authorization": localStorage.getItem('token')
+            // }
         }).then(res => {
-            console.log(res);
+            // console.log(res);
+            toastr.success(res.data.message);
         })
     };
 

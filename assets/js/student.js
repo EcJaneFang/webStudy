@@ -1,12 +1,12 @@
 window.onload = function () {
     axios({
         method: "get",
-        url: "http://www.itcbc.com:8000/student/list",
-        headers: {
-            "Authorization": localStorage.getItem('token')
-        }
+        url: "/student/list",
+        // headers: {
+        //     "Authorization": localStorage.getItem('token')
+        // }
     }).then(res => {
-        console.log(res);
+        // console.log(res);
         if (res.status === 200 && res.data.code === 0) {
             render(res.data.data)
 

@@ -26,7 +26,7 @@ window.onload = function () {
 
         axios({
             method: 'post',
-            url: "http://www.itcbc.com:8000/api/register",
+            url: "/api/register",
             data: {
                 username,
                 password
@@ -55,13 +55,13 @@ window.onload = function () {
         // 发送AXIOS请求
         axios({
             method: 'post',
-            url: "http://www.itcbc.com:8000/api/login",
+            url: "/api/login",
             data: {
                 username,
                 password
             }
         }).then(res => {
-            console.log(res);
+            // console.log(res);
             if (res.status === 200) {
                 toastr.success('res.data.message');
                 if (res.data.code === 0) {
