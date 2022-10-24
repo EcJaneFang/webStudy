@@ -83,6 +83,29 @@ window.onload = function () {
             })
         })
 
+        city.addEventListener('change', function () {
+            // city.innerHTML = `<option selected="" value="">--市--</option>`
+            county.innerHTML = `<option selected="" value="">--县--</option>`
+            axios({
+                method: "",
+                url: "/geo/county",
+                params: {
+                    pname: province.value,
+                    cname: this.value
+                }
+            }).then(res => {
+                console.log(res);
+
+                if (res.status === 200) {
+                    let str = `<option selected="" value="">--县--</option>`
+                    str += res.data.map(v => `<option value="${v}">${v}</option>`
+                    ).join("")
+                    county.innerHTML = str
+
+                }
+            })
+        })
+
         if (e.relatedTarget.innerHTML.trim() === '添加学员') {
             document.getElementById('addModalLabel').innerText = "录入新学员"
             document.getElementById('queren').innerText = "确认添加"
