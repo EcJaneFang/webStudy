@@ -24,6 +24,12 @@ window.onload = function () {
         })
     };
 
+    document.querySelector('.logout').addEventListener('click', function () {
+        localStorage.removeItem("token")
+        location.href = "./login.html"
+
+    });
+
 }
 
 

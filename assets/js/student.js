@@ -30,7 +30,7 @@ window.onload = function () {
                             <td>
                             <button data-id="${res.id}" type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
         data-bs-target="#addModal">修改</button>
-                            <button data-id="${res.id}" type="button" class="btn btn-danger btn-sm">删除</button>
+                            <button data-id="${res.id}" type="button" class="btn del btn-danger btn-sm">删除</button>
                             </td>
                         </tr>`
         }).join("")
@@ -333,4 +333,26 @@ window.onload = function () {
 
         addModal.querySelector('.add-form').reset();
     })
+
+    //删除学院 
+    document.querySelector('tbody').onclick = function (e) {
+        if (e.target.classList.contains("del")) {
+            // console.log(1);
+            let id = e.target.dataset.id
+            axios({
+                method: "DELETE",
+                url: "/student/delete",
+                params: {
+                    id
+                }
+            }).then(res => {
+                // console.log(res);
+                toastr.success(res.data.message);
+                if (res.status === 200 && res.data.code === 0) {
+                    getData()
+                }
+            })
+        }
+
+    };
 }
