@@ -41,6 +41,7 @@ window.onload = function () {
     let province = document.querySelector('[name="province"]');
     let city = document.querySelector('[name="city"]');
     let county = document.querySelector('[name="county"]');
+    let id
     $('#addModal').on('show.bs.modal', function (e) {
         // do something...
         // console.log(e.relatedTarget);
@@ -96,7 +97,7 @@ window.onload = function () {
                     cname: this.value
                 }
             }).then(res => {
-                console.log(res);
+                // console.log(res);
 
                 if (res.status === 200) {
                     let str = `<option selected="" value="">--县--</option>`
@@ -120,8 +121,8 @@ window.onload = function () {
             document.getElementById('chongzhi').style.display = "none"
             //数据回填
 
-            let id = e.relatedTarget.dataset.id
-            console.log(id);
+            id = e.relatedTarget.dataset.id
+            // console.log(id);
             //发送修改的axios亲求
             axios({
                 method: "",
@@ -295,9 +296,31 @@ window.onload = function () {
                     }
                 })
 
+            } else {
+                //提交逻辑
+                // console.log(222);
+                let fd = new FormData(document.querySelector('.add-form'))
+                let obj = {}
+                fd.forEach((v, k) => {
+                    obj[k] = v
+                })
+                obj.id = id;
+                //发送AXIOS请求
+                axios({
+                    method: "put",
+                    url: "/student/update",
+                    data: obj
+                }).then(res => {
+                    // console.log(res);
+                    toastr.success(res.data.message);
+                    getData()
+                    $('#addModal').modal('hide')
+                })
             }
-            //提交逻辑
-            // console.log(222);
+
+            // if (document.getElementById("queren") {
+
+            // }
 
 
         });
