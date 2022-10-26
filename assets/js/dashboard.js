@@ -1,25 +1,30 @@
 window.onload = function () {
-    // ------------------------饼图制作开始-----------------------------------
-    var PieCharts = echarts.init(document.querySelector('.row>.pie'))
-    var Picoption = {
+    //-------------------------------饼图开始-----------------------------
+    //初始化echart实例
+    let myPieChart = echarts.init(document.querySelector('.row>.pie'));
+    let pieOption = {
         title: {
-            text: '籍贯 HomeTown',
+            text: '籍贯 Hometown',
             textStyle: {
-                color: '#6d767e'
-            },
+                color: '#6d767e' // 标题演示
+            }
         },
         tooltip: {
-            formatter: '{a}<br/>{b}<strong>{c}</strong>人 占比{d}%'
+            // {a} 表示series中的name
+            // {b} 表示数据中的series.data中的name
+            // {c} 表示每一项的值
+            // {d} 表示百分比
+            formatter: '{a}:<br />{b}: <strong>{c}</strong>人 占比{d}%'
         },
         series: [
             {
-                name: '各地人员分布',
-                type: 'pie',
-                radius: ['10%', '80%'],
-                center: ['50%', '50%'],
-                roseType: 'area',
-                itemStyle: {
-                    borderRadius: 6
+                name: '各地学员分布',
+                type: 'pie', // pie 表示饼图
+                radius: ['10%', '65%'], // 内外圈的半径
+                center: ['50%', '50%'], // 中心点
+                roseType: 'area', // area表示面积模式，radius表示半径模式
+                itemStyle: { // 每一项的设置
+                    borderRadius: 4, // 扇形边缘圆角设置
                 },
                 data: [
                     { value: 40, name: '北京' },
@@ -33,44 +38,45 @@ window.onload = function () {
                 ]
             }
         ]
-    };
-
-
-    // ------------------------饼图制作结束-----------------------------------
-
-    // 发送axios亲求
+    }
+    //使用刚指定的配置项和数据显示图表
+    // myPieChart.setOption(pieOption)
+    //-------------------------------饼图结束-----------------------------
+    //发送查询请求
     axios({
         method: 'get',
         url: '/student/list'
     }).then(res => {
-        // console.log(res);
-
+        // console.log(res)
         if (res.status === 200 && res.data.code === 0) {
+            //取出res.data.data
             let arr = res.data.data
-            let PicArr = [{ value: 0, name: arr[0].province }]
-            arr.forEach(v => {
+            // 定义一个数组对象
+            let newPieOption = [{ value: 0, name: arr[0].province }]
+            // console.log(newPieOption)
+            arr.forEach(v => {  //遍历出省份
+                // console.log(v.province) 省份
+
                 //假设法
                 let flag = false
-                for (let i = 0; i < PicArr.length; i++) {
-                    if (v.province === PicArr[i].name) {
+                for (let i = 0; i < newPieOption.length; i++) {
+                    //当存在时
+                    if (v.province === newPieOption[i].name) {
                         flag = true
-                        PicArr[i].value++
+                        newPieOption[i].value++
                         break
-
                     }
                 }
-
-                //处理假设
-                if (flag === false) {
-                    PicArr.push({ value: 1, name: v.province })
+                //不存在时
+                if (flag == false) {
+                    newPieOption.push({ value: 1, name: v.province })
                 }
             })
-
-            // console.log(PicArr);
-            Picoption.series[0].data = PicArr
-            PieCharts.setOption(Picoption)
+            // console.log(newPieOption)
+            //重新赋值
+            pieOption.series[0].data = newPieOption
+            //使用刚指定的配置项和数据显示图表
+            myPieChart.setOption(pieOption);
         }
-
     })
-
 }

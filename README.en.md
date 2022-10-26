@@ -1,7 +1,7 @@
-# Visual Project
+# visualization81
 
 #### Description
-可视化项目
+广州前端81期可视化项目仓库
 
 #### Software Architecture
 Software architecture description
