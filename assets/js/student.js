@@ -292,6 +292,7 @@ window.onload = function () {
         //提交逻辑
         if (document.querySelector('#queren').innerText === '确认添加') {
             let fd = new FormData(document.querySelector('.add-form'))
+            console.log(fd);
             let obj = {}
             fd.forEach((v, k) => {
                 obj[k] = v
@@ -341,7 +342,7 @@ window.onload = function () {
 
     //删除
     document.querySelector('tbody').onclick = function (e) {
-        
+
         if (e.target.classList.contains('delete')) {
             //获取id
             let id = e.target.getAttribute('data-id')

@@ -42,6 +42,87 @@ window.onload = function () {
     //使用刚指定的配置项和数据显示图表
     // myPieChart.setOption(pieOption)
     //-------------------------------饼图结束-----------------------------
+
+    //--------------------------线图开始-----------------------------
+    let myLineChart = echarts.init(document.querySelector('.row > .line'));
+    let lineOption = {
+        //标题
+        title: {
+            text: '薪资 Salary',
+            textStyle: {
+                color: '#6d767e'
+            }
+        },
+        //鼠标移入事件
+        tooltip: {
+            trigger: 'axis',
+            //位置
+            position: function (option) {
+                return [option[0] + 10, option[1] + 10]
+            }
+        },
+        //图例组件
+        legend: {
+            top: 20
+        },
+        xAxis: {
+            type: 'category',
+            //坐标轴两边留白策略
+            boundaryGap: true,
+            data: ['张三', '李四', '张飞', '赵云', '狗哥', '张三', '李四', '张飞', '赵云', '狗哥', '张三', '李四', '张飞', '赵云', '狗哥', '张三', '李四', '张飞', '赵云', '狗哥']
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                formatter: '{value}'
+            },
+            interval: 5000
+        },
+        //数据缩放
+        dataZoom: [
+            {
+                type: 'slider',
+                start: 0,
+                end: 60
+            }
+        ],
+        series: [
+            {
+                name: '期望薪资',
+                type: 'line',
+                //是否平滑显示
+                smooth: true,
+                //不显示标记点
+                symbol: 'none',
+                //线条和标记的样式
+                itemStyle: {
+                    color: '#ee6666'
+                },
+                //线条样式的设置
+                // lineStyle:{
+                //   color:'pink'
+                // },
+                //线条下方区域的样式设置
+                // areaStyle:{
+                //   color:'skyblue'
+                // },
+                data: [8300, 9600, 15000, 30000, 12000, 8300, 9600, 15000, 17000, 12000, 8300, 9600, 15000, 17000, 12000, 8300, 9600, 15000, 17000, 12000],
+            },
+            {
+                name: '实际薪资',
+                type: 'line',
+                smooth: true,
+                symbol: 'none',
+                itemStyle: {
+                    color: '#5470c6'
+                },
+                data: [9600, 15000, 17000, 12000, 8300, 9600, 15000, 17000, 12000, 8300, 9600, 15000, 17000, 12000, 8300, 9600, 15000, 17000, 12000, 13000],
+            }
+        ]
+    };
+    // myLineChart.setOption(lineOption);
+    //==------------------------线图开始-----------------------------
+
     //发送查询请求
     axios({
         method: 'get',
@@ -77,6 +158,24 @@ window.onload = function () {
             pieOption.series[0].data = newPieOption
             //使用刚指定的配置项和数据显示图表
             myPieChart.setOption(pieOption);
+
+            //===========================折线图真实数据开始===============================
+            let lineName = [];
+            let linesalary = [];
+            let lineTruesalary = []
+            arr.forEach(v => {
+                lineName.push(v.name)
+                linesalary.push(v.salary)
+                lineTruesalary.push(v.truesalary)
+            })
+            lineOption.xAxis.data = lineName
+            lineOption.series[0].data = linesalary
+            lineOption.series[1].data = lineTruesalary
+
+            myLineChart.setOption(lineOption);
+
+            //===========================折线图真实数据结束===============================
+
         }
     })
 }
