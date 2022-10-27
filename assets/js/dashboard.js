@@ -291,7 +291,7 @@ window.onload = function () {
         method: 'get',
         url: '/student/list'
     }).then(res => {
-        // console.log(res)
+        console.log(res)
         if (res.status === 200 && res.data.code === 0) {
             //取出res.data.data
             let arr = res.data.data
@@ -339,6 +339,161 @@ window.onload = function () {
 
             //===========================折线图真实数据结束===============================
 
+            //===========================迁徙图真实数据结束===============================
+            mapOption.series[0].data = res.data.data.map(v => {
+                return {
+                    coords: [
+                        [v.jing, v.wei], //起点
+                        [112, 22]   //终点
+                    ]
+                };
+            });
+            // 迁徙图的涟漪点真实数据
+            mapOption.series[1].data = res.data.data.map((v) => {
+                return [
+                    v.jing,
+                    v.wei,
+                    v.city
+                ]
+            });
+            myMapChart.setOption(mapOption);
         }
     })
+
+
+
+
+
+    var myMapChart = echarts.init(document.querySelector('.map'));
+
+
+    // 指定图表的配置项和数据
+    var mapOption
+        = {
+        // 标题
+        title: {
+            text: '来广东路线'
+        },
+        // 地图
+        geo: {
+            // 中国地图
+            map: 'china',
+            // 是否缩放
+            roam: true,
+            // 缩放的极限
+            scaleLimit: {
+                max: 2,
+                min: 0.5
+            },
+            // 默认情况下的缩放
+            zoom: 1.2,
+            // 每一项的样式
+            itemStyle: {
+                // 默认情况下
+                normal: {
+                    borderColor: "#516a89", // 描边颜色
+                    borderWidth: 1 // 描边的宽
+                },
+                // 鼠标移入高亮的时候
+                emphasis: {
+                    color: "rgba(37,43,61,0.5)" // 每一项的颜色
+                }
+            },
+            // 鼠标移入不要文字
+            emphasis: {
+                label: {
+                    show: false
+                }
+            }
+        },
+        series: [
+            {
+                type: 'lines',
+                name: '广州',
+                // 层级 值大的在值小的上面
+                zlevel: 1,
+                // 线条的样式
+                lineStyle: {
+                    // 正常样式
+                    normal: {
+                        color: 'red',
+                        width: 1,
+                        opacity: 0.1,
+                        // 弯曲度，值越大越弯
+                        curveness: 0.2
+                    }
+                },
+                //  线条的特效
+                effect: {
+                    show: true,
+                    period: 4, // 特性时长
+                    symbol: 'arrow', // 特性图像标记
+                    symbolSize: 5, // 特效图形标记大小
+                    trailLength: 0.6 // 特效尾迹的长度
+                },
+                // 数据
+                data: [
+                    {
+                        coords: [
+                            [114, 30],  // 起点坐标
+                            [112, 22]   // 终点坐标
+                        ]
+                    },
+
+                ]
+            },
+            {
+                //涟漪点
+                type: 'effectScatter',
+                //该系列使用的坐标系
+                coordinateSystem: 'geo', //地理坐标系
+                //层级
+                zlevel: 1,
+                //涟漪特效相关配置
+                rippleEffect: {
+                    number: 3,
+                    period: 4,
+                    scale: 3,
+                    //波纹的绘制方式，可选'stroke' 和 'fill'
+                    brushType: 'stroke'
+                },
+                //文字
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'right', //位置
+                        offset: [5, 0], //文字偏移
+                        formatter: function (params) {
+                            return params.data[2]
+
+                        },
+                        fontSize: 12
+                    }
+                },
+                //标记的图形
+                symbol: 'circle',
+                //数据
+                data: [
+                    [112, 22],
+                    [114, 30],
+                    [104, 30],
+                    [94, 29]
+                ]
+            }
+        ]
+
+
+
+    };
+
+
+    // 使用刚指定的配置项和数据显示图表。
+    // myChart.setOption(option);
+
+
+
+
+
+
+
 }

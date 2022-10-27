@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="./echarts.min(1).js"></script>
+    <script src="./china.js"></script>
+    <!-- 为 ECharts 准备一个定义了宽高的 DOM -->
+    <div id="main" style="width: 600px;height:400px;"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+
+        // 指定图表的配置项和数据
+        var option = {
+            // 标题
+            title: {
+                text: '来广东路线'
+            },
+            // 地图
+            geo: {
+                // 中国地图
+                map: 'china',
+                // 是否缩放
+                roam: true,
+                // 缩放的极限
+                scaleLimit: {
+                    max: 2,
+                    min: 0.5
+                },
+                // 默认情况下的缩放
+                zoom: 1.2,
+                // 每一项的样式
+                itemStyle: {
+                    // 默认情况下
+                    normal: {
+                        borderColor: "#516a89", // 描边颜色
+                        borderWidth: 1 // 描边的宽
+                    },
+                    // 鼠标移入高亮的时候
+                    emphasis: {
+                        color: "rgba(37,43,61,0.5)" // 每一项的颜色
+                    }
+                },
+                // 鼠标移入不要文字
+                emphasis: {
+                    label: {
+                        show: false
+                    }
+                }
+            },
+            series: [
+                {
+                    type: 'lines',
+                    name: '广州',
+                    // 层级 值大的在值小的上面
+                    zlevel: 1,
+                    // 线条的样式
+                    lineStyle: {
+                        // 正常样式
+                        normal: {
+                            color: 'red',
+                            width: 1,
+                            opacity: 0.1,
+                            // 弯曲度，值越大越弯
+                            curveness: 0.2
+                        }
+                    },
+                    //  线条的特效
+                    effect: {
+                        show: true,
+                        period: 4, // 特性时长
+                        symbol: 'arrow', // 特性图像标记
+                        symbolSize: 5, // 特效图形标记大小
+                        trailLength: 0.6 // 特效尾迹的长度
+                    },
+                    // 数据
+                    data: [
+                        {
+                            coords: [
+                                [114, 30],  // 起点坐标
+                                [112, 22]   // 终点坐标
+                            ]
+                        },
+                        {
+                            coords: [
+                                [115, 39],  // 起点坐标
+                                [112, 22]   // 终点坐标
+                            ]
+                        }
+                    ]
+                },
+                {
+                    //涟漪点
+                    type: 'effectScatter',
+                    //该系列使用的坐标系
+                    coordinateSystem: 'geo', //地理坐标系
+                    //层级
+                    zlevel: 1,
+                    //涟漪特效相关配置
+                    rippleEffect: {
+                        number: 3,
+                        period: 4,
+                        scale: 3,
+                        //波纹的绘制方式，可选'stroke' 和 'fill'
+                        brushType: 'stroke'
+                    },
+                    //文字
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'right', //位置
+                            offset: [5, 0], //文字偏移
+                            formatter: 'dd', //显示的文字格式
+                            fontSize: 12
+                        }
+                    },
+                    //标记的图形
+                    symbol: 'circle',
+                    //数据
+                    data: [
+                        [112, 22],
+                        [114, 30],
+                        [104, 30],
+                        [94, 29]
+                    ]
+                }
+            ]
+
+
+
+        };
+
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+</body>
+
+</html>
