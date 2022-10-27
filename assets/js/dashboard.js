@@ -123,6 +123,169 @@ window.onload = function () {
     // myLineChart.setOption(lineOption);
     //==------------------------线图开始-----------------------------
 
+    // =================================柱状图开始====================================
+    let bar = echarts.init(document.querySelector('.barChart'));
+    let Baroption = {
+        //鼠标移入的提示
+        tooltip: {
+            trigger: 'axis',
+            //指示器类型。
+            axisPointer: {
+                //阴影指示器
+                type: 'cross'
+            }
+        },
+        legend: {
+            data: ['平均分', '低于60分人数', '60到80之间', '高于80分人数']
+        },
+        // 类似于内边距
+        grid: {
+            top: 30,
+            bottom: 30,
+            left: '7%',
+            right: '7%'
+        },
+        //x轴
+        xAxis: [
+            {
+                type: 'category',
+                //刻度
+                axisTick: { show: true },
+                data: ['1组', '2组', '3组', '4组', '5组', '6组', '7组'],
+                axisPointer: {
+                    type: 'shadow'
+                }
+            }
+        ],
+        //y轴
+        yAxis: [
+            {
+                type: 'value',
+                //最大最小
+                min: 0,
+                max: 100,
+                //强制设置坐标轴分割间隔
+                interval: 10,
+                //控制整个Y轴是否显示的
+                // show:true,
+                //控制轴线的
+                // axisLine:{
+                //   show:true
+                // },
+                //轴文本
+                axisLabel: {
+                    formatter: function (value) {
+                        return value + '分';
+                    }
+                }
+            },
+            {
+                type: 'value',
+                //最大最小
+                min: 0,
+                max: 10,
+                //强制设置坐标轴分割间隔
+                interval: 1,
+                //控制整个Y轴是否显示的
+                // show:true,
+                //控制轴线的
+                // axisLine:{
+                //   show:true
+                // },
+                //轴文本
+                axisLabel: {
+                    formatter: function (value) {
+                        return value + '人';
+                    }
+                }
+            }
+        ],
+        series: [
+            {
+                name: '平均分',
+                type: 'bar',
+                //不同柱子之间的间隙
+                barGap: '10%',
+                //柱条的宽度
+                barWidth: '20%',
+                //高亮的图形样式和标签样式。
+                emphasis: {
+                    //none' 不淡出其它图形，默认使用该配置。
+                    focus: 'none'
+                },
+                data: [83, 57, 90, 78, 66, 76, 77, 87, 69, 92, 88, 78],
+                //表示这个图例使用的是第一条Y轴
+                yAxisIndex: 0
+            },
+            {
+                name: '低于60分人数',
+                type: 'bar',
+                data: [2, 1, 3, 4, 2, 5, 2, 2, 4, 1, 6, 2],
+                //表示这个图例使用的是第二条Y轴
+                yAxisIndex: 1
+            },
+            {
+                name: '60到80之间',
+                type: 'bar',
+                data: [3, 2, 1, 5, 1, 2, 3, 4, 5, 2, 2, 4],
+                //表示这个图例使用的是第二条Y轴
+                yAxisIndex: 1
+            },
+            {
+                name: '高于80分人数',
+                type: 'bar',
+                data: [3, 2, 1, 5, 1, 2, 3, 4, 5, 2, 2, 4],
+                //表示这个图例使用的是第二条Y轴
+                yAxisIndex: 1
+            }
+        ]
+    };
+    // bar.setOption(Baroption);
+
+    //分装函数 
+    function getCi(cishu = 1) {
+        axios({
+            method: "get",
+            url: '/score/batch',
+            params: {
+                batch: cishu
+            }
+
+        }).then(res => {
+            // console.log(res);
+            if (res.status === 200 && res.data.code === 0) {
+                // avgScore
+                Baroption.xAxis[0].data = res.data.data.group.map(v => {
+                    return v + "组"
+                })
+                Baroption.series[0].data = res.data.data.avgScore
+
+                Baroption.series[1].data = res.data.data.lt60
+
+                Baroption.series[2].data = res.data.data.gt60
+                Baroption.series[3].data = res.data.data.gt60
+                bar.setOption(Baroption);
+            }
+        });
+
+    }
+
+    getCi()
+    let batch = document.getElementById('batch')
+    document.querySelector('.bar span.btn').addEventListener('click', function () {
+        if (batch.style.display == 'none') {
+            batch.style.display = 'block'
+
+        } else {
+            batch.style.display = 'none'
+        }
+    });
+    batch.querySelectorAll('li').forEach((v, i) => {
+        v.onclick = function () {
+            getCi(i + 1)
+        }
+    })
+    // =================================柱状图结束====================================
     //发送查询请求
     axios({
         method: 'get',
